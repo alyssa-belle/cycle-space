@@ -66,10 +66,18 @@
   const bookingFormView = document.getElementById("booking-form-view");
   const bookingSuccess = document.getElementById("booking-success");
   const bookingDate = document.getElementById("booking-date");
+  const bookingDateLabel = document.getElementById("booking-date-label");
+  const bookingRateLabel = document.getElementById("booking-rate-label");
+  const bookingRateSelect = document.getElementById("booking-rate-option");
+  const bookingEndDateField = document.getElementById("booking-end-date-field");
+  const bookingEndDate = document.getElementById("booking-end-date");
+  const bookingStartTime = document.getElementById("booking-start-time");
+  const bookingEndTime = document.getElementById("booking-end-time");
   const dialogSpaceName = document.getElementById("dialog-space-name");
   const listSpaceForm = document.getElementById("list-space-form");
   const listingConfirmation = document.getElementById("listing-confirmation");
   const listingConfirmationMessage = document.getElementById("listing-confirmation-message");
+  let activeBookingOptions = [];
 
   function addCategoryOption(category) {
     const alreadyExists = Array.prototype.some.call(categoryFilter.options, function (option) {
@@ -171,17 +179,76 @@
     bookingForm.reset();
     bookingFormView.hidden = false;
     bookingSuccess.hidden = true;
+    activeBookingOptions = Array.isArray(item.bookingOptions) && item.bookingOptions.length > 0
+      ? item.bookingOptions
+      : [{ unit: "hour" }];
+    bookingRateSelect.replaceChildren.apply(bookingRateSelect, activeBookingOptions.map(function (rate, index) {
+      const option = document.createElement("option");
+      option.value = String(index);
+      option.textContent = rate.amount === undefined ? rate.unit : "$" + rate.amount + " / " + rate.unit;
+      return option;
+    }));
+    const hasRateChoice = activeBookingOptions.length > 1;
+    bookingRateLabel.hidden = !hasRateChoice;
+    bookingRateSelect.hidden = !hasRateChoice;
+    bookingRateSelect.disabled = !hasRateChoice;
+    bookingRateSelect.required = hasRateChoice;
+    bookingRateSelect.value = "0";
+
     const today = new Date();
-    bookingDate.min = [
+    const minimumDate = [
       today.getFullYear(),
       String(today.getMonth() + 1).padStart(2, "0"),
       String(today.getDate()).padStart(2, "0")
     ].join("-");
+    bookingDate.min = minimumDate;
+    bookingEndDate.min = minimumDate;
+    updateBookingDateFields();
     bookingDialog.showModal();
+  }
+
+  function updateBookingDateFields() {
+    const selectedRate = activeBookingOptions[Number(bookingRateSelect.value)] || activeBookingOptions[0];
+    const usesDateRange = selectedRate.unit === "day" || selectedRate.unit === "week";
+    bookingDateLabel.textContent = usesDateRange ? "First day" : "When would you like to use it?";
+    bookingEndDateField.hidden = !usesDateRange;
+    bookingEndDate.disabled = !usesDateRange;
+    bookingEndDate.required = usesDateRange;
+    if (!usesDateRange) {
+      bookingEndDate.value = "";
+    } else if (bookingDate.value) {
+      bookingEndDate.min = bookingDate.value;
+    }
+    updateBookingTimeConstraints();
+  }
+
+  function updateBookingTimeConstraints() {
+    const isSingleDay = bookingEndDate.disabled || bookingDate.value === bookingEndDate.value;
+    if (isSingleDay && bookingStartTime.value) {
+      bookingEndTime.min = bookingStartTime.value;
+    } else {
+      bookingEndTime.removeAttribute("min");
+    }
+    const invalidTimeRange = isSingleDay && bookingStartTime.value && bookingEndTime.value &&
+      bookingEndTime.value <= bookingStartTime.value;
+    bookingEndTime.setCustomValidity(invalidTimeRange ? "End time must be after start time." : "");
   }
 
   searchBox.addEventListener("input", renderListings);
   categoryFilter.addEventListener("change", renderListings);
+  bookingRateSelect.addEventListener("change", updateBookingDateFields);
+  bookingDate.addEventListener("change", function () {
+    if (!bookingEndDate.disabled) {
+      bookingEndDate.min = bookingDate.value || bookingDate.min;
+      if (bookingEndDate.value && bookingEndDate.value < bookingDate.value) {
+        bookingEndDate.value = bookingDate.value;
+      }
+    }
+    updateBookingTimeConstraints();
+  });
+  bookingEndDate.addEventListener("change", updateBookingTimeConstraints);
+  bookingStartTime.addEventListener("input", updateBookingTimeConstraints);
+  bookingEndTime.addEventListener("input", updateBookingTimeConstraints);
   bookingForm.addEventListener("submit", function (event) {
     event.preventDefault();
     bookingFormView.hidden = true;
@@ -205,6 +272,10 @@
       description: formData.get("description").trim(),
       details: details,
       rate: "$" + Number(formData.get("rate")) + " / " + formData.get("rateUnit"),
+      bookingOptions: [{
+        amount: Number(formData.get("rate")),
+        unit: formData.get("rateUnit")
+      }],
       availability: formData.get("availability").trim()
     };
 

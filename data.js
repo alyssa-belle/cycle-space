@@ -23,7 +23,11 @@ const LISTINGS = [
     location: "Halifax, NS",
     description: "A quiet, comfortable room for team catch-ups, planning sessions, or community meetings.",
     details: "Up to 8 people · Whiteboard · Wi-Fi",
-    rate: "$18 / hour",
+    rate: "$18 / hour · $120 / day",
+    bookingOptions: [
+      { amount: 18, unit: "hour" },
+      { amount: 120, unit: "day" }
+    ],
     availability: "Weekdays"
   },
   {
@@ -83,7 +87,11 @@ const LISTINGS = [
     location: "Truro, NS",
     description: "A low-key, light-filled room for small group sessions, planning, and creative work.",
     details: "Up to 10 people · Tables · Natural light",
-    rate: "$20 / hour",
+    rate: "$20 / hour · $130 / day",
+    bookingOptions: [
+      { amount: 20, unit: "hour" },
+      { amount: 130, unit: "day" }
+    ],
     availability: "Weekdays and weekends"
   },
   {
@@ -94,6 +102,7 @@ const LISTINGS = [
     description: "A backroom for a small clothing business to store extra stock between pop-ups, markets, or restocks.",
     details: "Garment rails · Shelving · Shared loading access",
     rate: "$35 / day",
+    bookingOptions: [{ amount: 35, unit: "day" }],
     availability: "Select weekdays"
   }
 ];
