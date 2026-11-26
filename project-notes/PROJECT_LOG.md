@@ -12,6 +12,16 @@ Keep this up to date as you go — a few lines per work session is enough. It's 
 
 Copy this block for each session.
 
+### Session — 2026-11-26 — driver: not recorded
+
+- **Goal for this session:** Turn the Cycle Space idea into a polished, interactive static prototype for flexible commercial-space discovery and sharing.
+- **Key prompts we gave Copilot** (paste the important ones):
+  1. Build the Cycle Space prototype around fictional spaces, flexible booking requests, owner benefits, and the business model.
+  2. Use a powder-blue theme with dark-brown and wine-red accents; add a circular-economy quote, refine the owner subscription description, include a per-day retail-storage listing, and make “List your space” open a form.
+- **What worked:** Added responsive home, Explore, property-owner, About, and listing pages; searchable/filterable fictional listings, saved favorites, and demo booking requests; an owner listing form that adds a temporary Explore listing. Updated the visual palette and business-case summary. Listing/contact details from the form are not persisted; contact information is not sent or included in the demo listing.
+- **What broke, and how we fixed it:** Nothing noted. Verified JavaScript syntax, CSS structure/variables, HTML IDs and links, and the demo listing submission flow.
+- **Committed?** no — no commit created.
+
 ### Session — [date] — driver: [first name]
 
 - **Goal for this session:**
