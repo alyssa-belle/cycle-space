@@ -77,6 +77,12 @@
   const listSpaceForm = document.getElementById("list-space-form");
   const listingConfirmation = document.getElementById("listing-confirmation");
   const listingConfirmationMessage = document.getElementById("listing-confirmation-message");
+  const spacePhotos = document.getElementById("space-photos");
+  const photoStatus = document.getElementById("space-photo-status");
+  const photoPreview = document.getElementById("space-photo-preview");
+  const maxPhotos = 3;
+  const maxPhotoSize = 5 * 1024 * 1024;
+  let photoPreviewUrls = [];
   let activeBookingOptions = [];
 
   function addCategoryOption(category) {
@@ -102,9 +108,63 @@
     return element;
   }
 
+  function clearPhotoPreviews() {
+    photoPreviewUrls.forEach(function (url) {
+      URL.revokeObjectURL(url);
+    });
+    photoPreviewUrls = [];
+    photoPreview.replaceChildren();
+  }
+
+  function updatePhotoPreviews() {
+    clearPhotoPreviews();
+    const files = Array.from(spacePhotos.files);
+    let error = "";
+
+    if (files.length > maxPhotos) {
+      error = "Choose no more than " + maxPhotos + " photos.";
+    } else if (files.some(function (file) { return !file.type.startsWith("image/"); })) {
+      error = "Choose image files only.";
+    } else if (files.some(function (file) { return file.size > maxPhotoSize; })) {
+      error = "Each photo must be 5 MB or smaller.";
+    }
+
+    spacePhotos.setCustomValidity(error);
+    photoStatus.textContent = error || (files.length
+      ? files.length + (files.length === 1 ? " photo selected." : " photos selected.")
+      : "");
+
+    if (error) {
+      return;
+    }
+
+    files.forEach(function (file, index) {
+      const url = URL.createObjectURL(file);
+      photoPreviewUrls.push(url);
+      const image = document.createElement("img");
+      image.src = url;
+      image.alt = "Selected photo " + (index + 1);
+      photoPreview.appendChild(image);
+    });
+  }
+
   function makeCard(item) {
     const card = document.createElement("article");
     card.className = "listing-card";
+
+    if (Array.isArray(item.photos) && item.photos.length > 0) {
+      const photos = document.createElement("div");
+      photos.className = "listing-photos";
+      photos.setAttribute("role", "group");
+      photos.setAttribute("aria-label", "Photos of " + item.name);
+      item.photos.forEach(function (photo, index) {
+        const image = document.createElement("img");
+        image.src = photo;
+        image.alt = item.name + " photo " + (index + 1);
+        photos.appendChild(image);
+      });
+      card.appendChild(photos);
+    }
 
     const cardTop = document.createElement("div");
     cardTop.className = "listing-top";
@@ -236,6 +296,12 @@
 
   searchBox.addEventListener("input", renderListings);
   categoryFilter.addEventListener("change", renderListings);
+  spacePhotos.addEventListener("change", updatePhotoPreviews);
+  listSpaceForm.addEventListener("reset", function () {
+    clearPhotoPreviews();
+    spacePhotos.setCustomValidity("");
+    photoStatus.textContent = "";
+  });
   bookingRateSelect.addEventListener("change", updateBookingDateFields);
   bookingDate.addEventListener("change", function () {
     if (!bookingEndDate.disabled) {
@@ -278,6 +344,9 @@
       }],
       availability: formData.get("availability").trim()
     };
+    listing.photos = Array.from(spacePhotos.files).map(function (file) {
+      return URL.createObjectURL(file);
+    });
 
     LISTINGS.push(listing);
     addCategoryOption(category);
@@ -288,7 +357,7 @@
     const contactName = formData.get("contactName").trim();
     listingConfirmationMessage.textContent = "Thanks, " + contactName +
       ". The demo listing appears in Explore on this device until you refresh. " +
-      "No real listing was published, and your contact details were not saved or sent.";
+      "No real listing was published, and nothing, including your photos or contact details, was saved or sent.";
     listSpaceForm.reset();
     listSpaceForm.hidden = true;
     listingConfirmation.hidden = false;

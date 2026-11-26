@@ -77,7 +77,7 @@ Copy one, fill in the blanks, and send it:
 
 Real logins, real databases, real payments, real AI features, emails and texts all need servers, security and paid services. If you ask for them, Copilot will offer to **fake** them instead (for example, a checkout page that shows a pretend confirmation). That's the right answer for a prototype. Add the real version to the *"What a real version would need"* list in your project log — it's part of your grade.
 
-The Cycle Space **List your space** form is also a demo: a submitted listing appears in Explore only in that browser session and disappears on refresh. Contact details are not saved or sent. Use fictional information only.
+The Cycle Space **List your space** form is also a demo: a submitted listing appears in Explore only in that browser session and disappears on refresh. You can optionally add up to three photos to help people picture the space; they appear only in the demo listing and are not saved or sent. Contact details are not saved or sent. Use fictional information only.
 
 ## Step 5 — Save a checkpoint (commit) every time something works
 

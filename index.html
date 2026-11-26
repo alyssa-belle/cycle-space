@@ -170,10 +170,10 @@
       <div class="page-intro listing-intro">
         <p class="eyebrow">For property owners</p>
         <h1>Tell us about your space.</h1>
-        <p>Share the details someone needs to picture using it. In this demo, your listing appears only in Explore on this device until you refresh.</p>
+        <p>Share the details someone needs to picture using it. Photos are optional, but they can help people imagine using your space. In this demo, your listing appears only in Explore on this device until you refresh.</p>
       </div>
       <div class="listing-form-wrap">
-        <p class="form-demo-note"><strong>Student prototype:</strong> Use fictional contact details. Nothing is sent to us, and your contact information won’t be saved.</p>
+        <p class="form-demo-note"><strong>Student prototype:</strong> Use fictional contact details. Nothing is sent to us, and your contact information and photos won’t be saved.</p>
         <form id="list-space-form" class="space-form" autocomplete="off">
           <fieldset>
             <legend>About the space</legend>
@@ -225,6 +225,15 @@
                 </div>
               </div>
             </div>
+          </fieldset>
+          <fieldset>
+            <legend>Photos of your space (optional)</legend>
+            <p class="fieldset-hint">Photos help people picture the space before they book. Add up to 3 images (5 MB each); they’ll only appear in this demo listing.</p>
+            <label class="form-field form-field-wide" for="space-photos">Choose photos
+              <input id="space-photos" name="photos" type="file" accept="image/*" multiple>
+            </label>
+            <p id="space-photo-status" class="photo-status" role="status"></p>
+            <div id="space-photo-preview" class="photo-preview" role="group" aria-label="Selected photo previews"></div>
           </fieldset>
           <fieldset>
             <legend>Demo contact details</legend>
