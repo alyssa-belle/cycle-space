@@ -3,91 +3,262 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>YourStartup</title>
-  <meta name="description" content="A student startup prototype for BSAD 281.">
+  <title>Cycle Space — make room for what’s next</title>
+  <meta name="description" content="Find flexible, affordable space in the buildings around you with Cycle Space.">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-  <!-- =========================================================
-       HEADER: logo text + navigation.
-       Each link points to a "view" further down the page (#home, #explore, #about).
-       ========================================================= -->
   <header class="site-header">
-    <a class="brand" href="#home" id="brand-name">YourStartup</a>
-    <nav aria-label="Main">
-      <a href="#home">Home</a>
-      <a href="#explore">Explore</a>
-      <a href="#about">About</a>
+    <a class="brand" href="#home" id="brand-name" aria-label="Cycle Space home">
+      <span class="brand-mark" aria-hidden="true">c</span>
+      <span>cycle<span class="brand-light">space</span></span>
+    </a>
+    <nav aria-label="Main navigation">
+      <a href="#explore">Find a space</a>
+      <a href="#owners">For property owners</a>
+      <a href="#about">Our approach</a>
     </nav>
+    <a class="button button-small header-cta" href="#list-space">List your space <span aria-hidden="true">↗</span></a>
   </header>
 
   <main>
-
-    <!-- =======================================================
-         VIEW 1: HOME — what you do, for whom, and why it matters.
-         ======================================================= -->
     <section id="home" data-view>
       <div class="hero">
-        <p class="eyebrow">Prototype</p>
-        <h1 id="tagline">One sentence that says what your startup does.</h1>
-        <p class="lead" id="pitch">
-          Who is your customer, what problem do they have, and why is your
-          solution better than what they use today?
-        </p>
-        <a class="button" href="#explore">See it in action</a>
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="eyebrow-dot"></span> Space for good things</p>
+          <h1>Make room for <span>what’s next.</span></h1>
+          <p class="lead" id="pitch">Great spaces shouldn’t sit empty. Find flexible, affordable places to work, learn, gather, and grow — right in the buildings around you.</p>
+          <div class="hero-actions">
+            <a class="button" href="#explore">Explore available spaces <span aria-hidden="true">→</span></a>
+            <a class="text-link" href="#list-space">I have a space <span aria-hidden="true">↗</span></a>
+          </div>
+          <div class="hero-proof">
+            <span class="proof-avatars" aria-hidden="true"><i>✳</i><i>⌂</i><i>◌</i></span>
+            <span>More possibilities in the spaces we already have.</span>
+          </div>
+        </div>
+        <div class="hero-art" aria-label="An illustration of a shared workspace">
+          <div class="art-sun"></div>
+          <div class="art-window"><span></span><span></span><span></span><span></span></div>
+          <div class="art-shelf"><i></i><i></i><i></i></div>
+          <div class="art-plant"><span></span><i></i><i></i><i></i></div>
+          <div class="art-table"></div>
+          <div class="art-chair"></div>
+          <div class="art-note"><span class="note-icon">↗</span><span><strong>Good space, put to work.</strong><small>For the hours it would be empty.</small></span></div>
+          <span class="art-caption">A little more life in every square foot.</span>
+        </div>
       </div>
 
-      <div class="steps">
-        <div class="card">
-          <h2>1. Step one</h2>
-          <p>Describe the first thing a customer does.</p>
-        </div>
-        <div class="card">
-          <h2>2. Step two</h2>
-          <p>Describe what happens next.</p>
-        </div>
-        <div class="card">
-          <h2>3. Step three</h2>
-          <p>Describe the result the customer gets.</p>
-        </div>
+      <div class="impact-strip">
+        <div><span class="impact-icon">↗</span><span>Less time searching</span></div>
+        <div><span class="impact-icon">◷</span><span>More flexible than a lease</span></div>
+        <div><span class="impact-icon">↻</span><span>Better use of what exists</span></div>
       </div>
+
+      <section class="section-block how-section">
+        <div class="section-heading">
+          <p class="eyebrow">A better fit, both ways</p>
+          <h2>Space finds its next purpose.</h2>
+          <p>When a room is free and someone nearby needs it, Cycle Space helps make the connection.</p>
+        </div>
+        <div class="steps">
+          <article class="step-card"><span class="step-number">01</span><span class="step-icon">⌕</span><h3>Find your fit</h3><p>Browse real-feeling demo spaces by location, type, and what you want to do.</p></article>
+          <article class="step-card"><span class="step-number">02</span><span class="step-icon">◷</span><h3>Book on your terms</h3><p>Ask for the time you need — without taking on a long-term lease.</p></article>
+          <article class="step-card"><span class="step-number">03</span><span class="step-icon">↻</span><h3>Put space to work</h3><p>Owners earn from underused rooms and learn how their spaces are used.</p></article>
+        </div>
+      </section>
+
+      <section class="home-discover">
+        <div><p class="eyebrow">Room to make things happen</p><h2>Find a space for your next big thing.</h2><p>From a workshop to a weekly class, there’s more potential in the neighborhood than you think.</p></div>
+        <a class="button button-light" href="#explore">See the spaces <span aria-hidden="true">→</span></a>
+        <span class="discover-star" aria-hidden="true">✳</span>
+      </section>
     </section>
 
-    <!-- =======================================================
-         VIEW 2: EXPLORE — a list built from the fake data in data.js.
-         ======================================================= -->
     <section id="explore" data-view hidden>
-      <h1>Explore</h1>
-      <p class="muted">These examples are fake. They come from <code>data.js</code>.</p>
-
-      <label class="search">
-        <span>Search</span>
-        <input type="search" id="search-box" placeholder="Type to filter…">
-      </label>
-
-      <p class="muted" id="saved-count"></p>
+      <div class="page-intro">
+        <p class="eyebrow">The neighborhood is full of possibility</p>
+        <h1>Find your kind of space.</h1>
+        <p>Flexible places to work, learn, make, and meet — for the time you need them.</p>
+      </div>
+      <div class="explore-toolbar">
+        <label class="search">
+          <span class="field-label">Search spaces</span>
+          <span class="search-input-wrap"><span aria-hidden="true">⌕</span><input type="search" id="search-box" placeholder="Try a place, activity, or feature…" autocomplete="off"></span>
+        </label>
+        <label class="filter">
+          <span class="field-label">Space type</span>
+          <select id="category-filter" aria-label="Filter by space type"><option value="">All spaces</option></select>
+        </label>
+      </div>
+      <div class="results-heading"><p id="results-count" aria-live="polite"></p><span>Demo listings · Sample locations</span></div>
       <div class="grid" id="listing-grid"></div>
-      <p class="empty" id="empty-message" hidden>Nothing matches your search.</p>
+      <p class="empty" id="empty-message" hidden>No spaces match that search. Try another location or type.</p>
     </section>
 
-    <!-- =======================================================
-         VIEW 3: ABOUT — your team and your story.
-         ======================================================= -->
+    <section id="owners" data-view hidden>
+      <div class="owner-hero">
+        <div>
+          <p class="eyebrow">For property owners</p>
+          <h1>Your quiet rooms could be someone’s starting point.</h1>
+          <p class="lead">Turn underused commercial space into new income and local opportunity — without giving up the long-term use of your building.</p>
+          <a class="button" href="#list-space">List your space <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="owner-quote"><span aria-hidden="true">“</span><p>Make better use of the spaces we already have — before building more.</p><small>The circular economy, in practice</small></div>
+      </div>
+      <div class="section-heading owner-heading"><p class="eyebrow">Simple by design</p><h2>More value from the space you have.</h2><p>Cycle Space helps connect your available rooms with the people who need them.</p></div>
+      <div class="steps owner-steps">
+        <article class="step-card"><span class="step-number">01</span><span class="step-icon">⌂</span><h3>Share your availability</h3><p>Show the spaces, amenities, and times you’re comfortable making available.</p></article>
+        <article class="step-card"><span class="step-number">02</span><span class="step-icon">↗</span><h3>Earn from bookings</h3><p>Welcome organizations for short-term use and earn revenue when bookings happen.</p></article>
+        <article class="step-card"><span class="step-number">03</span><span class="step-icon">▥</span><h3>See how it’s used</h3><p>Use utilization insights to understand demand and make better decisions about your space.</p></article>
+      </div>
+      <section class="revenue-section">
+        <div class="section-heading"><p class="eyebrow">A business that grows with the network</p><h2>Built around shared value.</h2></div>
+        <div class="revenue-grid">
+          <article class="revenue-card"><span class="revenue-symbol">↗</span><h3>Booking commission</h3><p>Cycle Space earns a commission when a space is booked — success is tied to successful matches.</p><span class="revenue-label">Pay as you book</span></article>
+          <article class="revenue-card"><span class="revenue-symbol">◷</span><h3>Monthly subscriptions</h3><p>Optional premium plans for property owners managing multiple spaces, offering centralized booking tools, automated scheduling, and advanced performance reporting.</p><span class="revenue-label">Tools for regular hosts</span></article>
+          <article class="revenue-card"><span class="revenue-symbol">▥</span><h3>Enterprise analytics</h3><p>Organizations with multiple properties can use utilization insights to spot patterns and plan better.</p><span class="revenue-label">Insights across properties</span></article>
+        </div>
+      </section>
+      <div class="owner-cta"><div><p class="eyebrow">A more useful kind of real estate</p><h2>Let the empty hours do more.</h2><p>This prototype uses fictional listings and doesn’t accept real properties or payments.</p></div><a class="button button-light" href="#list-space">List your space <span aria-hidden="true">→</span></a></div>
+    </section>
+
+    <section id="list-space" data-view hidden>
+      <div class="page-intro listing-intro">
+        <p class="eyebrow">For property owners</p>
+        <h1>Tell us about your space.</h1>
+        <p>Share the details someone needs to picture using it. In this demo, your listing appears only in Explore on this device until you refresh.</p>
+      </div>
+      <div class="listing-form-wrap">
+        <p class="form-demo-note"><strong>Student prototype:</strong> Use fictional contact details. Nothing is sent to us, and your contact information won’t be saved.</p>
+        <form id="list-space-form" class="space-form" autocomplete="off">
+          <fieldset>
+            <legend>About the space</legend>
+            <div class="form-grid">
+              <label class="form-field form-field-wide" for="space-name">Space name <span aria-hidden="true">*</span>
+                <input id="space-name" name="spaceName" type="text" maxlength="60" placeholder="e.g. Market Street Studio" required>
+              </label>
+              <label class="form-field" for="space-location">City and province <span aria-hidden="true">*</span>
+                <input id="space-location" name="location" type="text" maxlength="80" placeholder="e.g. Halifax, NS" required>
+              </label>
+              <label class="form-field" for="space-category">Space type <span aria-hidden="true">*</span>
+                <select id="space-category" name="category" required>
+                  <option value="">Choose a type</option>
+                  <option>Meeting room</option>
+                  <option>Classroom</option>
+                  <option>Workshop</option>
+                  <option>Community space</option>
+                  <option>Creative studio</option>
+                  <option>Coworking</option>
+                  <option>Event space</option>
+                  <option>Retail storage</option>
+                  <option>Other</option>
+                </select>
+              </label>
+              <label class="form-field form-field-wide" for="space-description">What could people use it for? <span aria-hidden="true">*</span>
+                <textarea id="space-description" name="description" rows="3" maxlength="240" placeholder="Describe the space and who it might work well for." required></textarea>
+              </label>
+              <label class="form-field" for="space-capacity">Capacity or storage size
+                <input id="space-capacity" name="capacity" type="text" maxlength="60" placeholder="e.g. 12 people or 4 garment rails">
+              </label>
+              <label class="form-field" for="space-amenities">Features or amenities
+                <input id="space-amenities" name="amenities" type="text" maxlength="100" placeholder="e.g. Wi-Fi, tables, loading access">
+              </label>
+              <label class="form-field" for="space-availability">When is it available? <span aria-hidden="true">*</span>
+                <input id="space-availability" name="availability" type="text" maxlength="80" placeholder="e.g. Weekday evenings" required>
+              </label>
+              <div class="form-field">
+                <span class="form-label">Your rate <span aria-hidden="true">*</span></span>
+                <div class="rate-fields">
+                  <label class="visually-hidden" for="space-rate">Rate amount</label>
+                  <span class="currency-prefix" aria-hidden="true">$</span>
+                  <input id="space-rate" name="rate" type="number" min="1" max="100000" step="1" placeholder="25" required>
+                  <label class="visually-hidden" for="space-rate-unit">Rate period</label>
+                  <select id="space-rate-unit" name="rateUnit" aria-label="Rate period" required>
+                    <option value="hour">per hour</option>
+                    <option value="day">per day</option>
+                    <option value="week">per week</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Demo contact details</legend>
+            <p class="fieldset-hint">Use made-up details only. This form does not contact you or anyone else.</p>
+            <div class="form-grid">
+              <label class="form-field" for="contact-name">Contact name <span aria-hidden="true">*</span>
+                <input id="contact-name" name="contactName" type="text" maxlength="60" placeholder="e.g. Alex Sample" required>
+              </label>
+              <label class="form-field" for="contact-email">Contact email <span aria-hidden="true">*</span>
+                <input id="contact-email" name="contactEmail" type="email" maxlength="100" placeholder="alex@example.test" required>
+              </label>
+            </div>
+          </fieldset>
+          <button class="button form-submit" type="submit">Preview my demo listing <span aria-hidden="true">→</span></button>
+        </form>
+        <div id="listing-confirmation" class="listing-confirmation" role="status" hidden>
+          <span class="success-icon" aria-hidden="true">✓</span>
+          <h2>Your demo listing is ready.</h2>
+          <p id="listing-confirmation-message"></p>
+          <div class="confirmation-actions">
+            <a class="button" href="#explore">See it in Explore <span aria-hidden="true">→</span></a>
+            <button class="text-link add-another-button" id="add-another-space" type="button">List another space</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section id="about" data-view hidden>
-      <h1>About us</h1>
-      <p>Tell the story of why your team started this company.</p>
-      <p>Use first names only, or no names at all — this site is public.</p>
+      <div class="page-intro about-intro">
+        <p class="eyebrow">A little more life in every square foot</p>
+        <h1>Good space is already all around us.</h1>
+        <p>Cycle Space is an idea for making underused commercial spaces easier to find and more useful to the people nearby.</p>
+      </div>
+      <div class="about-grid">
+        <article class="about-card about-card-dark"><span class="about-symbol">↻</span><p class="eyebrow">Our point of view</p><h2>Use what we have, a little better.</h2><p>More options for the people who need room to do good things. More value for the owners with room to share.</p></article>
+        <article class="about-card"><span class="about-symbol">⌂</span><p class="eyebrow">Who it’s for</p><h2>People with room to share. People who need room.</h2><p>Non-profits, schools, small businesses, community groups, and property owners — brought together around a better use of existing space.</p></article>
+      </div>
+      <div class="network-note"><span class="network-icon">✳</span><div><h2>More connections, more possibilities.</h2><p>As more owners list space, people have more places to choose from. As more groups look for rooms, owners can find more of the right users. That’s the promise of a two-sided network.</p></div></div>
     </section>
-
   </main>
 
-  <!-- Keep this footer. Your site must say it is a student project. -->
   <footer class="site-footer">
-    <p>Student prototype for BSAD 281 at St. Francis Xavier University. Not a real company — all data is fictional.</p>
+    <a class="brand footer-brand" href="#home"><span class="brand-mark" aria-hidden="true">c</span><span>cycle<span class="brand-light">space</span></span></a>
+    <p>A student prototype for BSAD 281 at St. Francis Xavier University. Not a real company — all listings and data are fictional.</p>
+    <a href="#home" class="back-top">Back to top ↑</a>
   </footer>
 
-  <!-- Scripts load in this order: data first, then the code that uses it. -->
+  <dialog id="booking-dialog" aria-labelledby="dialog-title">
+    <button class="dialog-close" id="dialog-close" type="button" aria-label="Close booking request">×</button>
+    <div id="booking-form-view">
+      <p class="eyebrow">A little closer to your next big thing</p>
+      <h2 id="dialog-title">Request this space</h2>
+      <p class="dialog-space-name" id="dialog-space-name"></p>
+      <p class="dialog-copy">This is a demo request only. Nothing will be sent or booked.</p>
+      <form id="booking-form">
+        <label for="booking-date">When would you like to use it?</label>
+        <input id="booking-date" name="date" type="date" required>
+        <label for="booking-purpose">What do you need the space for?</label>
+        <select id="booking-purpose" name="purpose" required>
+          <option value="">Choose one</option>
+          <option>Community gathering</option>
+          <option>Class or workshop</option>
+          <option>Work or meeting</option>
+          <option>Creative project</option>
+          <option>Other</option>
+        </select>
+        <button class="button" type="submit">Send demo request <span aria-hidden="true">→</span></button>
+      </form>
+    </div>
+    <div id="booking-success" hidden>
+      <span class="success-icon" aria-hidden="true">✓</span>
+      <h2>Request noted!</h2>
+      <p>This was just a demo — no request was sent and no booking was made.</p>
+      <button class="button" id="dialog-done" type="button">Back to spaces</button>
+    </div>
+  </dialog>
+
   <script src="data.js"></script>
   <script src="app.js"></script>
 </body>

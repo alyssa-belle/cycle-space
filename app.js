@@ -1,49 +1,36 @@
-// ============================================================
-// app.js — what your site DOES.
-// Plain JavaScript, no libraries, no installs.
-// It uses STARTUP and LISTINGS from data.js (loaded first).
-// ============================================================
-
+// Cycle Space prototype interactions. No bookings or requests leave this device.
 (function () {
   "use strict";
 
-  // ----------------------------------------------------------
-  // 1. Saving things in the browser (localStorage).
-  //    This only remembers things on THIS browser on THIS device.
-  //    Your teammates and your customers will NOT see it.
-  //    A real product would need a server and a database for that.
-  // ----------------------------------------------------------
   const storage = {
     get: function (key, fallback) {
       try {
         const saved = localStorage.getItem(key);
         return saved === null ? fallback : JSON.parse(saved);
       } catch (error) {
-        return fallback; // storage blocked or broken: just carry on
+        return fallback;
       }
     },
     set: function (key, value) {
       try {
         localStorage.setItem(key, JSON.stringify(value));
       } catch (error) {
-        // storage blocked (e.g. private window): ignore
+        // Saving is optional; the prototype remains usable if storage is unavailable.
       }
     }
   };
 
   let savedIds = storage.get("savedIds", []);
+  if (!Array.isArray(savedIds)) {
+    savedIds = [];
+  }
+  savedIds = savedIds.filter(function (id) {
+    return LISTINGS.some(function (item) { return item.id === id; });
+  });
 
-  // ----------------------------------------------------------
-  // 2. Put the startup's name and pitch on the page.
-  // ----------------------------------------------------------
-  document.title = STARTUP.name;
-  document.getElementById("brand-name").textContent = STARTUP.name;
-  document.getElementById("tagline").textContent = STARTUP.tagline;
+  document.title = STARTUP.name + " — make room for what’s next";
   document.getElementById("pitch").textContent = STARTUP.pitch;
 
-  // ----------------------------------------------------------
-  // 3. Views: show one section at a time, based on the #link in the address bar.
-  // ----------------------------------------------------------
   function showView() {
     const requested = (window.location.hash || "#home").slice(1);
     const views = document.querySelectorAll("[data-view]");
@@ -69,41 +56,84 @@
 
   window.addEventListener("hashchange", showView);
 
-  // ----------------------------------------------------------
-  // 4. Explore page: build one card per listing.
-  //    We use textContent (not innerHTML) so text is always shown
-  //    as text — a basic security habit.
-  // ----------------------------------------------------------
   const grid = document.getElementById("listing-grid");
   const searchBox = document.getElementById("search-box");
+  const categoryFilter = document.getElementById("category-filter");
   const emptyMessage = document.getElementById("empty-message");
-  const savedCount = document.getElementById("saved-count");
+  const resultsCount = document.getElementById("results-count");
+  const bookingDialog = document.getElementById("booking-dialog");
+  const bookingForm = document.getElementById("booking-form");
+  const bookingFormView = document.getElementById("booking-form-view");
+  const bookingSuccess = document.getElementById("booking-success");
+  const bookingDate = document.getElementById("booking-date");
+  const dialogSpaceName = document.getElementById("dialog-space-name");
+  const listSpaceForm = document.getElementById("list-space-form");
+  const listingConfirmation = document.getElementById("listing-confirmation");
+  const listingConfirmationMessage = document.getElementById("listing-confirmation-message");
+
+  function addCategoryOption(category) {
+    const alreadyExists = Array.prototype.some.call(categoryFilter.options, function (option) {
+      return option.value === category;
+    });
+    if (!alreadyExists) {
+      const option = document.createElement("option");
+      option.value = category;
+      option.textContent = category;
+      categoryFilter.appendChild(option);
+    }
+  }
+
+  Array.from(new Set(LISTINGS.map(function (item) { return item.category; })))
+    .sort()
+    .forEach(addCategoryOption);
+
+  function createTextElement(tagName, className, text) {
+    const element = document.createElement(tagName);
+    element.className = className;
+    element.textContent = text;
+    return element;
+  }
 
   function makeCard(item) {
     const card = document.createElement("article");
-    card.className = "card";
+    card.className = "listing-card";
 
-    const tag = document.createElement("span");
-    tag.className = "tag";
-    tag.textContent = item.category;
+    const cardTop = document.createElement("div");
+    cardTop.className = "listing-top";
+    cardTop.appendChild(createTextElement("span", "tag", item.category));
 
-    const title = document.createElement("h2");
-    title.textContent = item.name;
-
-    const text = document.createElement("p");
-    text.textContent = item.description;
-
+    const saveButton = document.createElement("button");
+    saveButton.type = "button";
+    saveButton.className = "save-button";
     const isSaved = savedIds.indexOf(item.id) !== -1;
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "button secondary";
-    button.textContent = isSaved ? "Saved ✓" : "Save";
-    button.setAttribute("aria-pressed", isSaved ? "true" : "false");
-    button.addEventListener("click", function () {
+    saveButton.textContent = isSaved ? "♥" : "♡";
+    saveButton.setAttribute("aria-pressed", isSaved ? "true" : "false");
+    saveButton.setAttribute("aria-label", (isSaved ? "Remove saved space: " : "Save space: ") + item.name);
+    saveButton.addEventListener("click", function () {
       toggleSaved(item.id);
     });
+    cardTop.appendChild(saveButton);
 
-    card.append(tag, title, text, button);
+    const location = createTextElement("p", "listing-location", "⌖  " + item.location);
+    const title = createTextElement("h2", "", item.name);
+    const description = createTextElement("p", "listing-description", item.description);
+    const details = createTextElement("p", "listing-details", item.details);
+
+    const footer = document.createElement("div");
+    footer.className = "listing-footer";
+    const priceAndAvailability = document.createElement("div");
+    priceAndAvailability.appendChild(createTextElement("strong", "listing-rate", item.rate));
+    priceAndAvailability.appendChild(createTextElement("span", "listing-availability", item.availability));
+    const requestButton = document.createElement("button");
+    requestButton.type = "button";
+    requestButton.className = "button button-card";
+    requestButton.textContent = "Request";
+    requestButton.addEventListener("click", function () {
+      openBookingDialog(item);
+    });
+    footer.append(priceAndAvailability, requestButton);
+
+    card.append(cardTop, location, title, description, details, footer);
     return card;
   }
 
@@ -119,23 +149,92 @@
 
   function renderListings() {
     const query = searchBox.value.trim().toLowerCase();
+    const category = categoryFilter.value;
     const matches = LISTINGS.filter(function (item) {
-      const text = (item.name + " " + item.category + " " + item.description).toLowerCase();
-      return text.indexOf(query) !== -1;
+      const searchableText = [
+        item.name, item.category, item.location, item.description,
+        item.details, item.availability
+      ].join(" ").toLowerCase();
+      return searchableText.indexOf(query) !== -1 &&
+        (!category || item.category === category);
     });
 
     grid.replaceChildren.apply(grid, matches.map(makeCard));
     emptyMessage.hidden = matches.length > 0;
-    savedCount.textContent = savedIds.length === 0
-      ? "Tap Save on anything you like."
-      : "You've saved " + savedIds.length + " item(s) on this device.";
+    const savedSummary = savedIds.length + (savedIds.length === 1 ? " favorite" : " favorites");
+    resultsCount.textContent = matches.length + (matches.length === 1 ? " space" : " spaces") +
+      " found · " + savedSummary + " saved on this device";
+  }
+
+  function openBookingDialog(item) {
+    dialogSpaceName.textContent = item.name + " · " + item.location;
+    bookingForm.reset();
+    bookingFormView.hidden = false;
+    bookingSuccess.hidden = true;
+    const today = new Date();
+    bookingDate.min = [
+      today.getFullYear(),
+      String(today.getMonth() + 1).padStart(2, "0"),
+      String(today.getDate()).padStart(2, "0")
+    ].join("-");
+    bookingDialog.showModal();
   }
 
   searchBox.addEventListener("input", renderListings);
+  categoryFilter.addEventListener("change", renderListings);
+  bookingForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    bookingFormView.hidden = true;
+    bookingSuccess.hidden = false;
+  });
+  listSpaceForm.addEventListener("submit", function (event) {
+    event.preventDefault();
 
-  // ----------------------------------------------------------
-  // 5. Start up.
-  // ----------------------------------------------------------
+    const formData = new FormData(listSpaceForm);
+    const category = formData.get("category");
+    const capacity = formData.get("capacity").trim();
+    const amenities = formData.get("amenities").trim();
+    const details = [capacity, amenities].filter(Boolean).join(" · ") || "Details to be confirmed";
+    const listing = {
+      id: LISTINGS.reduce(function (highestId, item) {
+        return Math.max(highestId, item.id);
+      }, 0) + 1,
+      name: formData.get("spaceName").trim(),
+      category: category,
+      location: formData.get("location").trim(),
+      description: formData.get("description").trim(),
+      details: details,
+      rate: "$" + Number(formData.get("rate")) + " / " + formData.get("rateUnit"),
+      availability: formData.get("availability").trim()
+    };
+
+    LISTINGS.push(listing);
+    addCategoryOption(category);
+    searchBox.value = "";
+    categoryFilter.value = "";
+    renderListings();
+
+    const contactName = formData.get("contactName").trim();
+    listingConfirmationMessage.textContent = "Thanks, " + contactName +
+      ". The demo listing appears in Explore on this device until you refresh. " +
+      "No real listing was published, and your contact details were not saved or sent.";
+    listSpaceForm.reset();
+    listSpaceForm.hidden = true;
+    listingConfirmation.hidden = false;
+  });
+  document.getElementById("add-another-space").addEventListener("click", function () {
+    listingConfirmation.hidden = true;
+    listSpaceForm.hidden = false;
+    listSpaceForm.reset();
+    document.getElementById("space-name").focus();
+  });
+  document.getElementById("dialog-close").addEventListener("click", function () {
+    bookingDialog.close();
+  });
+  document.getElementById("dialog-done").addEventListener("click", function () {
+    bookingDialog.close();
+  });
+
   renderListings();
   showView();
 })();

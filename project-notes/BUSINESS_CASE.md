@@ -4,10 +4,10 @@ Your prototype shows *what* the product looks like. This document explains *why*
 
 ## 1. The idea
 
-- **Customer:** Who exactly is it for?
-- **Problem:** What problem do they have today, and how do they solve it now?
-- **Solution:** What does your product do differently or better?
-- **Revenue:** How does the company make money?
+- **Customer:** A two-sided market: commercial property owners and organizations such as non-profits, schools, community groups, and small businesses.
+- **Problem:** Owners can have rooms that are empty for part of the day or week, while local organizations need affordable space but may not be able to commit to a long-term lease. Finding a suitable short-term space can take time and coordination.
+- **Solution:** Cycle Space helps organizations discover and request flexible use of available commercial spaces. Owners can make selected rooms available, earn from bookings, and use utilization insights to understand demand.
+- **Revenue:** A commission on bookings, monthly subscriptions for space-management tools, and enterprise subscriptions for multi-property utilization analytics.
 
 ## 2. Where IT creates value
 
